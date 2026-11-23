@@ -1,0 +1,35 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: alb
+spec:
+  controllerName: eks.amazonaws.com/gateway-alb
+
+---
+
+apiVersion: gateway.k8s.aws/v1
+kind: LoadBalancerConfiguration
+metadata:
+  name: lb-configuration
+  namespace: gallery
+spec:
+  scheme: internet-facing
+
+---
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: app
+  namespace: gallery
+spec:
+  gatewayClassName: alb
+  infrastructure:
+    parametersRef:
+      group: gateway.k8s.aws
+      kind: LoadBalancerConfiguration
+      name: lb-configuration
+  listeners:
+  - name: http
+    protocol: HTTP
+    port: 80

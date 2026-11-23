@@ -1,0 +1,10 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: app
+  namespace: gallery
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      tier: app
